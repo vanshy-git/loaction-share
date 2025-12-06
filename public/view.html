@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Track Location</title>
+</head>
+<body>
+  <h2>Current Location</h2>
+  <p id="info">Waiting for location...</p>
+  <p><a id="mapsLink" href="#" target="_blank">Open in Google Maps</a></p>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+    const info = document.getElementById("info");
+    const link = document.getElementById("mapsLink");
+
+    if (!id) {
+      info.innerText = "Missing id in URL.";
+    } else {
+      async function fetchLocation() {
+        try {
+          const res = await fetch(`/location/${id}`);
+          if (!res.ok) {
+            info.innerText = "No location yet or session not found.";
+            return;
+          }
+
+          const data = await res.json();
+          if (!data.lat || !data.lng) {
+            info.innerText = "Location not received yet.";
+            return;
+          }
+
+          info.innerText = `Lat: ${Number(data.lat).toFixed(5)}, Lng: ${Number(data.lng).toFixed(5)}`;
+          const mapsUrl = `https://www.google.com/maps?q=${data.lat},${data.lng}`;
+          link.href = mapsUrl;
+        } catch (e) {
+          info.innerText = "Error fetching location.";
+          console.error(e);
+        }
+      }
+
+      // Update every 15 seconds
+      setInterval(fetchLocation, 15000);
+      fetchLocation();
+    }
+  </script>
+</body>
+</html>
